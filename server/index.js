@@ -15,18 +15,20 @@ const io = new Server(server, {
     }
 })
 
+//채팅클라이언트에 연결
 io.on("connection", (socket) => {
-    console.log(socket.id)
+    console.log('@@@',socket,new Date().toLocaleTimeString())
     console.log(`User Connected: ${socket.id}`)
 
-    socket.on("join-room", (data) => {
-        socket.join(data)
-        console.log(`User with ID: ${socket.id}/ joined room: ${data}`)
+    //whereRoom에 참가하기
+    socket.on("join-room", (whereRoom) => {
+        socket.join(whereRoom)
+        console.log(`User with ID: ${socket.id} joined room: ${whereRoom}`)
     })
 
-    socket.on("send_message", (data) => {
-        socket.to(data.room).emit("receive_message", data)
-        console.log(data)
+    socket.on("send_message", (chatLog) => {
+        socket.to(chatLog.room).emit("receive_message", chatLog)
+        console.log('chatLog:',chatLog)
     })
     socket.on("disconnect", () => {
         console.log("User Disconnected", socket.id)
